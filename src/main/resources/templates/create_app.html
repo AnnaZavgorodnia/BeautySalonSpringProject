@@ -24,8 +24,9 @@
                 </div>
                 <div class="input-field">
                     <select id="select-service">
+                        <option value="" disabled selected>Choose service</option>
                     </select>
-                    <label for="select-service"
+                    <label for="select-service" id="select_label"
                            th:text="#{create.appointment.service.title}">Choose service...</label>
                     <h5 id="price"></h5>
                     <h5 id="app_date"></h5>
@@ -45,14 +46,13 @@
         <div class="modal-content">
             <div class="row">
                 <div class="col s6" style="font-size: 20px">
-                    <p id="master-modal">Master: ${master.fullName}</p>
+                    <p id="master-modal"></p>
                     <p id="service-modal"></p>
                     <p id="price-modal"></p>
                     <p id="date-modal"></p>
                     <p id="time-modal"></p>
                 </div>
-                <div class="col s6 center-align">
-                    <img style="width: 60%" src="${pageContext.request.contextPath}/masters/${master.imagePath}">
+                <div class="col s6 center-align" id="master_image">
                 </div>
             </div>
         </div>

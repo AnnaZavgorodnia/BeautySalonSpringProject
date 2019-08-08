@@ -8,21 +8,34 @@ document.addEventListener('DOMContentLoaded', function() {
     masterImg.setAttribute("src",`/static/images/masters/${MASTER_ID}.jpg`);
     document.getElementById("masterImg").appendChild(masterImg);
 
+    let image = document.createElement("img");
+    image.setAttribute("src",`/static/images/masters/${MASTER_ID}.jpg`);
+    image.setAttribute("id","img");
+    image.style.width = "60%";
+    document.getElementById("master_image").appendChild(image);
+
+    var elems_modal = document.querySelectorAll('.modal');
+    var instances_modal = M.Modal.init(elems_modal,{startingTop: "4%",endingTop: "30%"});
+
     getServices(MASTER_ID)
         .then(data => {
             renderServices(data);
             let elems = document.querySelectorAll('select');
             let instances = M.FormSelect.init(elems,{});
+            document.getElementById("select-service").addEventListener("change",function(e){
+                console.log(e.target);
+                let inp = document.getElementById('select-service').M_FormSelect.input.value;
+                console.log(inp);
+                document.getElementById("service-modal").innerHTML = "Service: " + inp;
+                let val = document.getElementById(inp);
+                document.getElementById("price").innerHTML = "Price: " + val.dataset.price;
+                document.getElementById("price-modal").innerHTML = "Price: " + val.dataset.price + "UAH";
+                document.getElementById("select_label").style.color = "black";
+            });
         })
         .catch(e => console.log(e));
 
-    document.getElementById("select-service").addEventListener("change",function(e){
-        console.log(e.target);
-        let inp = document.getElementById('select-service').M_FormSelect.input.value;
-        console.log(inp);
-        let val = document.getElementById(inp);
-        document.getElementById("price").innerHTML = "Price: " + val.dataset.price;
-    });
+
 
     Date.prototype.addDays = function(days) {
         let date = new Date(this.valueOf());
@@ -41,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
         onClose: ondraw
     });
 
+    document.getElementById("button-book").addEventListener("click", makeApp);
 
 });
 
@@ -56,10 +70,6 @@ function renderServices(data){
         option.innerHTML = el.name;
         select.appendChild(option);
     });
-
-    let first = select.firstElementChild;
-    first.setAttribute("selected", true);
-    document.getElementById("price").innerHTML = "Price: " + first.dataset.price;
 }
 
 async function getApps(id,date) {
@@ -104,7 +114,7 @@ function createSchedule(time, data){
     let title = document.createElement("h4");
     title.innerHTML = time;
     let btn = document.createElement("button");
-    btn.addEventListener("click", makeApp);
+    btn.addEventListener("click", fullModal);
     btn.innerHTML = "book";
     btn.setAttribute("class","btn-black btn-active");
     btn.setAttribute("id",time);
@@ -130,6 +140,41 @@ function setTime(e){
         e.target.dataset.time;
 }
 
+function fullModal(e) {
+    let serviceName = document.getElementById('select-service').M_FormSelect.input.value;
+    let serviceElement = document.getElementById(serviceName);
+    if(serviceElement == null){
+        console.log(true);
+        document.getElementById("select_label").style.color = "red";
+
+    } else{
+        setTime(e);
+
+        let someDate = document.getElementsByClassName('datepicker')[0];
+        let instance = M.Datepicker.getInstance(someDate);
+        let idate = instance.date;
+
+        let finalDate = new Date(idate.getFullYear(),
+            idate.getMonth(),
+            idate.getDate(),
+            e.target.dataset.time.substring(0,2));
+        console.log(finalDate);
+        finalDate.setHours(finalDate.getHours()+3);
+        let appDate = finalDate.toISOString().substring(0,10);
+        let appTime = finalDate.toISOString().substring(11,19);
+
+        let date_el = document.getElementById("date-modal");
+        let time_el = document.getElementById("time-modal");
+        date_el.value = appDate;
+        time_el.value = appTime;
+        date_el.innerHTML = "Date: " + appDate;
+        time_el.innerHTML = "Time: " + appTime.substring(0,5);
+
+        var inst = M.Modal.getInstance(document.getElementById("modal"));
+        inst.open();
+    }
+}
+
 function makeApp(e){
 
     setTime(e);
@@ -138,10 +183,12 @@ function makeApp(e){
     let instance = M.Datepicker.getInstance(someDate);
     let idate = instance.date;
 
+    let time = document.getElementById("time-modal").value;
+
     let finalDate = new Date(idate.getFullYear(),
         idate.getMonth(),
         idate.getDate(),
-        e.target.dataset.time.substring(0,2));
+        time.substring(0,2));
 
     console.log(finalDate);
     finalDate.setHours(finalDate.getHours()+3);
