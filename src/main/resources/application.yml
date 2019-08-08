@@ -1,0 +1,17 @@
+server:
+    port: 8088
+spring:
+    mandatory-file-encoding: UTF-8
+    jpa:
+      show-sql: true
+      hibernate:
+        ddl-auto: update
+      database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    data:
+      jpa:
+        repositories:
+          enabled: true
+    datasource:
+      url: jdbc:mysql://localhost:3306/beauty_salon?serverTimezone=UTC
+      username: root
+      password: root1@34A

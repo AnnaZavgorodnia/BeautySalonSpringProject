@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/styles/styles.css">
+</head>
+<body>
+    <div th:replace="partials/header :: header">...</div>
+
+    <div class="form__intro"></div>
+    <div class="form__wrapper">
+        <h2 th:text="#{registration.page.form.name}"></h2>
+        <div class="form__container">
+            <form name="form" id="reg_form"  method="post" action="/api/clients" autocomplete="off">
+                <label id="usernameLabel"
+                       for="username"
+                       th:text="#{registration.page.username}">Username</label>
+                <input class="form__input"
+                       type="text"
+                       id="username"
+                       placeholder="Username"
+                       name="username"
+                       required>
+                <label style="color: cornflowerblue" id="username-error"></label>
+                <label style="color: cornflowerblue" id="username-error-exists"></label>
+                <br>
+                <label id="firstNameLabel"
+                       for="firstName"
+                       th:text="#{registration.page.first.name}">First Name</label>
+                <input type="text"
+                       class="form__input"
+                       id="firstName"
+                       placeholder="First Name"
+                       name="firstName"
+                       required>
+                <label style="color: cornflowerblue" id="firstName-error"></label>
+                <br>
+                <label id="lastNameLabel"
+                       for="lastName"
+                       th:text="#{registration.page.last.name}">Last Name</label>
+                <input type="text"
+                       class="form__input"
+                       id="lastName"
+                       placeholder="Last Name"
+                       name="lastName"
+                       required>
+                <label style="color: cornflowerblue" id="lastName-error"></label>
+                <br>
+                <label id="emailLabel"
+                       for="email"
+                       th:text="#{registration.page.email}">Email</label>
+                <input type="email"
+                       class="form__input"
+                       id="email"
+                       placeholder="Email"
+                       name="email"
+                       required>
+                <label style="color: cornflowerblue" id="email-error"></label>
+                <br>
+                <label id="passwordLabel"
+                       for="password"
+                       th:text="#{registration.page.password}">Password</label>
+                <input type="password"
+                       class="form__input"
+                       id="password"
+                       placeholder="Password"
+                       name="password"
+                       required>
+                <label style="color: cornflowerblue" id="password-error"></label>
+                <br>
+                <button type="submit"
+                        class="form__button"
+                        th:text="#{registration.page.button}">
+                    Sign up
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/js/reg_form.js"></script>
+</body>
+</html>

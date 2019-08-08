@@ -1,0 +1,10 @@
+<div th:fragment="header" xmlns:th="http://www.thymeleaf.org">
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        var MY_APP = {
+            contextPath: /*[[@{/}]]*/,
+            user: /*[[${#authentication.getPrincipal()}]]*/
+        };
+        /*]]>*/
+    </script>
+</div>

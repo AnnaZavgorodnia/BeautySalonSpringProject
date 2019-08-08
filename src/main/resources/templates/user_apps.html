@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Montserrat:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/styles/styles.css">
+</head>
+<body>
+    <div th:replace="partials/header :: header">...</div>
+    <section class="section top">
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="section__header">
+                <h3 class="section__subtitle"
+                    th:text="#{users.apps.title}">My appointments</h3>
+            </div>
+            <div class="user__app__content">
+            </div>
+        </div>
+    </section>
+
+    <script type="text/javascript" src="/js/my_apps.js"></script>
+</body>
+</html>

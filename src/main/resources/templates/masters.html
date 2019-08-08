@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Montserrat:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/styles/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+</head>
+<body ng-app="masters" ng-controller="AppCtrl">
+    <div th:replace="partials/header :: header">...</div>
+    <section class="section top">
+    </section>
+    <section class="section" data-ng-init="getMasters()">
+        <div class="container">
+            <div class="section__header">
+                <h3 class="section__subtitle"
+                    th:text="#{masters.page.who.we.are}">Who we are</h3>
+                <h2 class="section__title"
+                    th:text="#{masters.page.our.team}">Our team</h2>
+                <div class="section__text">
+                    <p th:text="#{masters.page.team.text}">
+                        text
+                    </p>
+                </div>
+            </div>
+            <div class="about" id="masters">
+            </div>
+        </div>
+    </section>
+
+    <script type="text/javascript" src="/js/masters.js"></script>
+</body>
+</html>
