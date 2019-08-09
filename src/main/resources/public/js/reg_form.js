@@ -9,9 +9,10 @@ function regUser(e) {
 
     addClient()
         .then(data => {
+            console.log(data);
             if(data == null){
-                document.getElementById("username-error-exists").innerHTML = "User with such username already exists";
-            } else if(data.errors != null){
+                document.getElementById("username-error").innerHTML = "User with such username already exists";
+            } else if(data.errors){
                 data.errors.forEach(el => {
                    document.getElementById(`${el.field}-error`).innerHTML = el.defaultMessage;
                 });
@@ -28,6 +29,7 @@ async function addClient() {
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
 
+
     let response = await fetch('http://localhost:8088/api/clients', {
         method: 'POST',
         headers: {
@@ -43,7 +45,20 @@ async function addClient() {
         })
     });
 
-    if(response.status === 400) return null;
+
+    console.log(response);
+
+    clearErrors();
+
+    if(response.status === 409) return null;
 
     return await response.json();
+}
+
+function clearErrors() {
+    document.getElementById("username-error").innerHTML = "";
+    document.getElementById("firstName-error").innerHTML = "";
+    document.getElementById("lastName-error").innerHTML = "";
+    document.getElementById("email-error").innerHTML = "";
+    document.getElementById("password-error").innerHTML = "";
 }

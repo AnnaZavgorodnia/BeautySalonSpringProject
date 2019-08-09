@@ -1,11 +1,13 @@
 package com.salon.controller;
 
+import com.salon.controller.error.ResponseError;
 import com.salon.controller.exceptions.NotUniqueUsernameException;
 import com.salon.dto.ClientDTO;
 import com.salon.entity.Client;
 import com.salon.service.ClientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +24,12 @@ import java.util.NoSuchElementException;
 @CrossOrigin(origins="*")
 public class ClientController {
 
+    private final MessageSource messageSource;
     private final ClientService clientService;
 
-    public ClientController(ClientService clientService) {
+    public ClientController(ClientService clientService,
+                            MessageSource messageSource) {
+        this.messageSource = messageSource;
         this.clientService = clientService;
     }
 
@@ -33,26 +38,36 @@ public class ClientController {
         return clientService.getAll();
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity<Client> createClient(@RequestBody @Valid ClientDTO client){
-        try {
-            return new ResponseEntity<>(clientService.save(client),HttpStatus.CREATED);
-        } catch (NotUniqueUsernameException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+    public Client createClient(@RequestBody @Valid ClientDTO client){
+        return clientService.save(client);
     }
 
+    @ResponseStatus(HttpStatus.FOUND)
     @GetMapping("/{clientId}")
-    public ResponseEntity<Client> getMaster(@PathVariable Long clientId){
-        try{
-            return new ResponseEntity<>( clientService.findById(clientId) , HttpStatus.OK);
-        } catch (NoSuchElementException ex) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+    public Client getMaster(@PathVariable Long clientId){
+        return clientService.findById(clientId);
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseBody
+    public ResponseError conflict() {
+        return new ResponseError("Username already exists");
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseBody
+    public ResponseError notFound(NoSuchElementException e) {
+        return new ResponseError(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity handleRuntimeException(RuntimeException ex) {
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    @ResponseBody
+    public ResponseError handleRuntimeException(RuntimeException ex) {
+        return new ResponseError(ex.getMessage());
     }
 }

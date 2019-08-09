@@ -30,6 +30,7 @@ public class ClientService {
 
     @Transactional
     public Client save(@NonNull ClientDTO client) throws NotUniqueUsernameException {
+
         Client toSave = new Client();
         toSave.setUsername(client.getUsername());
         toSave.setFullName(client.getFirstName() + " " + client.getLastName());
@@ -37,11 +38,7 @@ public class ClientService {
         toSave.setPassword(passwordEncoder.encode(client.getPassword()));
         toSave.setRole(RoleType.CLIENT);
 
-        try{
-            return clientRepo.save(toSave);
-        } catch (DataIntegrityViolationException e){
-            throw new NotUniqueUsernameException(e);
-        }
+        return clientRepo.save(toSave);
     }
 
     public List<Client> getAll(){
@@ -49,7 +46,8 @@ public class ClientService {
     }
 
     public Client findById(Long clientId) {
-        return clientRepo.findById(clientId).orElseThrow(NoSuchElementException::new);
+        return clientRepo.findById(clientId)
+                .orElseThrow(() -> new NoSuchElementException("User with id=" + clientId + " not found"));
     }
 
     public Optional<Client> findByUsername(String clientUsername) {
