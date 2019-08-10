@@ -1,5 +1,6 @@
 package com.salon.service;
 
+import com.salon.dto.ServiceDTO;
 import com.salon.entity.Service;
 import com.salon.repository.ServiceReporitory;
 import lombok.NonNull;
@@ -27,4 +28,14 @@ public class ServiceService {
         return serviceRepo.findAll();
     }
 
+    public Service create(ServiceDTO service) {
+        return serviceRepo.save(Service.builder()
+                .name(service.getName())
+                .price(service.getPrice())
+                .build());
+    }
+
+    public void deleteAll(){
+        serviceRepo.deleteAll();
+    }
 }

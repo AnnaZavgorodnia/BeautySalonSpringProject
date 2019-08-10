@@ -16,7 +16,7 @@ function renderMastersList(data){
         let li = document.createElement("li");
         li.setAttribute("class","collection-item avatar");
         let img = document.createElement("img");
-        img.setAttribute("src",`/static/images/masters/${el.id}.jpg`);
+        img.setAttribute("src",el.imagePath);
         img.setAttribute("class", "circle");
         let span = document.createElement("span");
         span.setAttribute("class","title");

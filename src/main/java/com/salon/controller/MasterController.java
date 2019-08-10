@@ -1,5 +1,6 @@
 package com.salon.controller;
 
+import com.salon.controller.error.ResponseError;
 import com.salon.controller.exceptions.NotUniqueUsernameException;
 import com.salon.dto.MasterDTO;
 import com.salon.entity.Master;
@@ -17,7 +18,7 @@ import java.util.NoSuchElementException;
 
 @Slf4j
 @RestController
-@RequestMapping(path="api/masters",
+@RequestMapping(path="/api/masters",
         produces="application/json")
 @CrossOrigin(origins="*")
 public class MasterController {
@@ -36,26 +37,12 @@ public class MasterController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Master createMaster(@RequestBody @Valid MasterDTO master){
-
-        log.info("username - {}", master.getUsername());
-        log.info("firstName - {}", master.getFirstName());
-        log.info("lastName - {}", master.getLastName());
-        log.info("email - {}", master.getEmail());
-        log.info("password - {}", master.getPassword());
-        log.info("instagram - {}", master.getInstagram());
-        log.info("services - {}", master.getServices().get(0));
-        log.info("position - {}", master.getPosition());
-
         return masterService.save(master);
     }
 
     @GetMapping("/{masterId}")
-    public ResponseEntity<Master> getMaster(@PathVariable Long masterId){
-        try{
-            return new ResponseEntity<>( masterService.findById(masterId) , HttpStatus.OK);
-        } catch (NoSuchElementException ex) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+    public Master getMaster(@PathVariable Long masterId){
+         return masterService.findById(masterId);
     }
 
     @GetMapping("/{masterId}/services")
@@ -63,9 +50,24 @@ public class MasterController {
         return masterService.findById(masterId).getServices();
     }
 
+    @PostMapping("/{masterId}/image")
+    public Master updateMasterImagePath(@PathVariable Long masterId,
+                                        @RequestParam("imagePath") String imagePath){
+        return masterService.updateImage(masterId, imagePath);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotUniqueUsernameException.class)
+    @ResponseBody
+    public ResponseError handleRuntimeException(NotUniqueUsernameException ex) {
+        return new ResponseError(ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity handleRuntimeException(RuntimeException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("ejfiow");
+    @ResponseBody
+    public ResponseError handleRuntimeException(RuntimeException ex) {
+        return new ResponseError(ex.getMessage());
     }
 
 }

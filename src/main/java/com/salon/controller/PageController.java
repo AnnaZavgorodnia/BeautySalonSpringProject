@@ -8,12 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.Locale;
 
 @Controller
 public class PageController {
 
     @GetMapping("/")
-    public String mainPage(Model model, Principal principal){
+    public String mainPage(Model model){
         model.addAttribute("module","index");
         return "index";
     }
@@ -21,8 +22,7 @@ public class PageController {
     @RequestMapping("/login")
     public String loginForm(@RequestParam(value = "error", required = false) String error,
                             @RequestParam(value = "logout", required = false) String logout,
-                            Model model,
-                            Principal principal){
+                            Model model){
         model.addAttribute("error", error != null);
         model.addAttribute("logout", logout != null);
         model.addAttribute("module", "login");
@@ -30,7 +30,7 @@ public class PageController {
     }
 
     @GetMapping("/registration")
-    public String regPage(Model model, Principal principal){
+    public String regPage(Model model){
         model.addAttribute("module", "registration");
         return "registration";
     }

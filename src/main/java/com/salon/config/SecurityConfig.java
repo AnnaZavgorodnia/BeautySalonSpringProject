@@ -19,14 +19,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http        .authorizeRequests()
-                    .antMatchers("/","/registration","/js/**", "/static/**","/api/clients/**").permitAll()
+                    .antMatchers("/","/registration","/js/**", "/static/**").permitAll()
+                    .antMatchers(HttpMethod.POST,"/api/clients").permitAll()
+//                    .antMatchers("/api/masters/**",
+//                            "/api/positions/**",
+//                            "/api/services/**",
+//                            "/api/users/**",
+//                            "/api/appointments/**",
+//                            "/create_master",
+//                            "/all_masters",
+//                            "/all_appointments").hasAuthority("ADMIN")
+//                    .
                     //.antMatchers(HttpMethod.POST, "/api/clients").permitAll()
-                    .antMatchers(HttpMethod.GET,"/api/appointments").hasAuthority("ADMIN")
-                    .antMatchers(HttpMethod.GET,"/api/masters/{masterId}/appointments").hasAnyAuthority("ADMIN","MASTER")
+                    //.antMatchers( "/api/appointments").hasAuthority("CLIENT")
+                    //.antMatchers("/api/appointments/**").hasAnyAuthority("ADMIN","CLIENT")
+                    //.antMatchers(HttpMethod.GET,"/api/masters/{masterId}/appointments").hasAnyAuthority("ADMIN","MASTER")
                     .anyRequest().authenticated()
                 .and()
                     .formLogin().loginPage("/login").permitAll()
-                    .defaultSuccessUrl("/masters",true)
+                    .defaultSuccessUrl("/",true)
                 .and()
                     .logout()
                     .clearAuthentication(true)

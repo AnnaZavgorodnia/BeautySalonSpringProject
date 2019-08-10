@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @RestController
-@RequestMapping(path="api/positions",
+@RequestMapping(path="/api/positions",
         produces="application/json")
 @CrossOrigin(origins="*")
 public class PositionController {

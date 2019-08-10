@@ -1,5 +1,7 @@
 package com.salon.config;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -25,27 +27,12 @@ public class AppConfig implements WebMvcConfigurer {
         return new ModelMapper();
     }
 
-    @Bean
-    public LocaleResolver localeResolver() {
-        return new CookieLocaleResolver();
-    }
 
     @Bean
-    public LocaleChangeInterceptor localeInterceptor() {
-        LocaleChangeInterceptor localeInterceptor = new LocaleChangeInterceptor();
-        localeInterceptor.setParamName("lang");
-        return localeInterceptor;
-    }
-
-    @Bean
-    public LocalValidatorFactoryBean validator(MessageSource messageSource) {
-        LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();
-        validatorFactoryBean.setValidationMessageSource(messageSource);
-        return validatorFactoryBean;
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(localeInterceptor());
+    public Cloudinary cloudinary(){
+        return new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "dky8ny2iv",
+                "api_key", "938892413353457",
+                "api_secret", "buS5mBoKo2zZZRkO555AUpVywa4"));
     }
 }

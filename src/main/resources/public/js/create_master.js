@@ -126,31 +126,52 @@ function addMaster(e){
                     content.errors.forEach(el => {
                         document.getElementById(`${el.field}-error`).innerHTML = el.defaultMessage;
                     });
+                } else{
+
+                    const input = document.getElementById('image');
+
+                    const formData = new FormData();
+
+                    formData.append("file", input.files[0]);
+                    const imageData = await upload(formData);
+
+                    if(imageData != null){
+                        updateImage(content.id, imageData.url);
+                    }
+
                 }
-
             }
-
-
-        //
-        // document.getElementById(content.appTime.substring(0,5)).setAttribute("class","btn-black btn-disabled");
-        // console.log(content);
     })();
 
-
-    // let form = new FormData();
-    // form.append("file",document.getElementById("image").files[0]);
-    //
-    // (async () => {
-    //     const rawResponse = await fetch('http://localhost:8088/api/image', {
-    //         method: 'POST',
-    //         enctype: 'multipart/form-data',
-    //         data: form,
-    //         dataType: 'json'
-    //     });
-    //     // const content = await rawResponse.json();
-    //     //
-    //     // document.getElementById(content.appTime.substring(0,5)).setAttribute("class","btn-black btn-disabled");
-    //     // console.log(content);
-    // })();
 }
+
+const upload = (data) => {
+    return fetch('http://localhost:8088/api/image', {
+            method: 'POST',
+            body: data
+        }).then(
+            response => response.json()
+        ).then(
+            success => {
+                console.log(success);
+                return success;
+            }
+        ).catch(
+            error => null
+        );
+};
+
+const updateImage = (id, url) => {
+    fetch(`http://localhost:8088/api/masters/${id}/image?imagePath=${url}` , {
+        method: 'POST'
+    }).then(
+        response => response.json()
+    ).then(
+        success => console.log(success)
+    ).catch(
+        error => console.log(error)
+    );
+};
+
+
 

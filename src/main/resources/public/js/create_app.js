@@ -4,18 +4,25 @@ const MASTER_ID = window.location.pathname.split('/')[2];
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    let masterImg = document.createElement("img");
-    masterImg.setAttribute("src",`/static/images/masters/${MASTER_ID}.jpg`);
-    document.getElementById("masterImg").appendChild(masterImg);
 
-    let image = document.createElement("img");
-    image.setAttribute("src",`/static/images/masters/${MASTER_ID}.jpg`);
-    image.setAttribute("id","img");
-    image.style.width = "60%";
-    document.getElementById("master_image").appendChild(image);
+    getMaster(MASTER_ID)
+        .then(master => {
+            let masterImg = document.createElement("img");
+            masterImg.setAttribute("src",master.imagePath);
+            document.getElementById("masterImg").appendChild(masterImg);
 
-    var elems_modal = document.querySelectorAll('.modal');
-    var instances_modal = M.Modal.init(elems_modal,{startingTop: "4%",endingTop: "30%"});
+            let image = document.createElement("img");
+            image.setAttribute("src",master.imagePath);
+            image.setAttribute("id","img");
+            image.style.width = "60%";
+            document.getElementById("master_image").appendChild(image);
+
+            document.getElementById("master-modal").innerHTML = "Master: " + master.fullName;
+        })
+        .catch(e => console.log(e));
+
+    let elems_modal = document.querySelectorAll('.modal');
+    let instances_modal = M.Modal.init(elems_modal,{startingTop: "4%",endingTop: "30%"});
 
     getServices(MASTER_ID)
         .then(data => {
@@ -74,6 +81,12 @@ function renderServices(data){
 
 async function getApps(id,date) {
     let response = await fetch(`http://localhost:8088/api/masters/${id}/appointments/${date}`);
+    let data = await response.json();
+    return data;
+}
+
+async function getMaster(id) {
+    let response = await fetch(`http://localhost:8088/api/masters/${id}`);
     let data = await response.json();
     return data;
 }
@@ -175,9 +188,7 @@ function fullModal(e) {
     }
 }
 
-function makeApp(e){
-
-    setTime(e);
+function makeApp(){
 
     let someDate = document.getElementsByClassName('datepicker')[0];
     let instance = M.Datepicker.getInstance(someDate);

@@ -53,4 +53,9 @@ public class ClientService {
     public Optional<Client> findByUsername(String clientUsername) {
         return clientRepo.findByUsername(clientUsername);
     }
+
+    @Transactional
+    public void deleteAll(){
+        clientRepo.deleteAll();
+    }
 }

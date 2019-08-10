@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.crypto.Data;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -51,13 +52,12 @@ public class MasterService {
 
         List<com.salon.entity.Service> services = master.getServices().stream()
                             .map(el -> serviceRepo.findById(el)
-                                                .orElseThrow(NoSuchElementException::new))
+                                                .orElseThrow(() -> new NotUniqueUsernameException("No such service")))
                             .collect(Collectors.toList());
 
         toSave.setServices(services);
 
         return masterRepo.save(toSave);
-
     }
 
     public List<Master> getAll(){
@@ -66,6 +66,19 @@ public class MasterService {
 
 
     public Master findById(Long masterId) {
-        return masterRepo.findById(masterId).orElseThrow(NoSuchElementException::new);
+        return masterRepo.findById(masterId)
+                .orElseThrow(() -> new NoSuchElementException("master with id:" + masterId +" not found"));
+    }
+
+    public Master updateImage(@NotNull Long id, @NotNull String imagePath){
+        Master master = masterRepo.findById(id)
+                .orElseThrow(()-> new NoSuchElementException("master with id:" + id + " not found"));
+        master.setImagePath(imagePath);
+        return masterRepo.save(master);
+    }
+
+    @Transactional
+    public void deleteAll(){
+        masterRepo.deleteAll();
     }
 }

@@ -1,5 +1,6 @@
 package com.salon.controller;
 
+import com.salon.controller.error.ResponseError;
 import com.salon.dto.UserAppointmentDTO;
 import com.salon.entity.Appointment;
 import com.salon.dto.AppointmentDTO;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.lang.reflect.Type;
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -62,7 +64,7 @@ public class AppointmentController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("appointments")
-    public Appointment createAppointment(@RequestBody AppointmentDTO appointment,
+    public Appointment createAppointment(@RequestBody @Valid AppointmentDTO appointment,
                                          Principal principal){
         log.info("Appointment: {} ", appointment);
         return appointmentService.save(appointment, principal.getName());
@@ -93,8 +95,10 @@ public class AppointmentController {
         return new ModelMapper().map(appointments, listType);
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity handleRuntimeException(RuntimeException ex) {
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseBody
+    public ResponseError handleRuntimeException(NoSuchElementException ex) {
+        return new ResponseError(ex.getMessage());
     }
 }

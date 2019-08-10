@@ -1,5 +1,6 @@
 package com.salon.controller;
 
+import com.salon.dto.ServiceDTO;
 import com.salon.entity.Service;
 import com.salon.service.ServiceService;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Slf4j
@@ -25,6 +27,12 @@ public class ServiceController {
     @GetMapping
     public List<Service> getAll(){
         return serviceService.findAll();
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public Service createService(@RequestBody ServiceDTO service){
+        return serviceService.create(service);
     }
 
     @ExceptionHandler(RuntimeException.class)

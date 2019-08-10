@@ -50,10 +50,10 @@ public class AppointmentService {
                             .appDate(date)
                             .appTime(time)
                             .client(clientService.findByUsername(clientUsername)
-                                    .orElseThrow(NoSuchElementException::new))
+                                    .orElseThrow(() -> new NoSuchElementException("user with username: " + clientUsername + " not found")))
                             .master(masterService.findById(appointment.getMaster()))
                             .service(serviceService.findByName(appointment.getServiceName())
-                                    .orElseThrow(NoSuchElementException::new))
+                                    .orElseThrow(() -> new NoSuchElementException("service: " + appointment.getServiceName() + " not found")))
                             .build();
         return appRepo.save(app);
     }
@@ -79,5 +79,9 @@ public class AppointmentService {
 
     public List<Appointment> findAll() {
         return appRepo.findAll();
+    }
+
+    public void deleteAll(){
+        appRepo.deleteAll();
     }
 }

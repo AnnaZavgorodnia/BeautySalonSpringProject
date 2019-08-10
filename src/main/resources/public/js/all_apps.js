@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
             plugins: [ 'timeGrid','dayGrid' ],
-            height: 575,
+            height: 670,
             header: {
                 left: 'dayGridMonth,timeGridWeek,timeGridDay custom1',
                 center: 'title',
@@ -37,7 +37,16 @@ document.addEventListener('DOMContentLoaded', function() {
             maxTime: "18:00:00",
             weekends: false,
             events: ar,
-            navLinks: true
+            navLinks: true,
+            eventLimit: true,
+            views: {
+            dayGrid: {
+                eventLimit: 3
+            },
+            timeGrid: {
+                eventLimit: 2
+            }
+        }
         });
 
         calendar.render();

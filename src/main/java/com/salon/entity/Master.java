@@ -27,6 +27,9 @@ public class Master extends User{
     @Column(name="instagram")
     private String instagram;
 
+    @Column(name="image_path")
+    private String imagePath;
+
     @Column(name = "position", nullable = false)
     @Enumerated(EnumType.STRING)
     private Position position;

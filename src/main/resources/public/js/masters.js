@@ -16,7 +16,7 @@ angular.module("masters",[])
                         let about_image = document.createElement("div");
                         about_image.className = "about__img";
                         let master_image = document.createElement("img");
-                        master_image.setAttribute("src",`/static/images/masters/${m.id}.jpg`);
+                        master_image.setAttribute("src", m.imagePath);
                         about_image.appendChild(master_image);
                         about_item.appendChild(about_image);
                         let about_text = document.createElement("div");
