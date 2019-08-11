@@ -29,6 +29,11 @@ public class ServiceController {
         return serviceService.findAll();
     }
 
+    @DeleteMapping
+    public void deleteAllServices(){
+        serviceService.deleteAll();
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Service createService(@RequestBody ServiceDTO service){

@@ -30,7 +30,7 @@ public class Service{
     @Column(name = "price", nullable = false)
     private Integer price;
 
-    @ManyToMany(mappedBy = "services")
+    @ManyToMany(mappedBy = "services", cascade = CascadeType.PERSIST)
     @JsonIgnore
     private List<Master> masters = new ArrayList<>();
 

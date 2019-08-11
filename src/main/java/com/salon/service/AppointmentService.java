@@ -59,7 +59,8 @@ public class AppointmentService {
     }
 
     public Appointment findById(Long appId){
-        return appRepo.findById(appId).orElseThrow(NoSuchElementException::new);
+        return appRepo.findById(appId)
+                .orElseThrow(() -> new NoSuchElementException("No appointments with id: " + appId));
     }
 
     public List<Appointment> findAllMastersAppointmentsByDate(Long masterId, LocalDateTime date) {

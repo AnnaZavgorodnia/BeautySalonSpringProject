@@ -44,6 +44,12 @@ public class ClientController {
         return clientService.save(client);
     }
 
+
+    @DeleteMapping
+    public void deleteAllClients(){
+        clientService.deleteAll();
+    }
+
     @ResponseStatus(HttpStatus.FOUND)
     @GetMapping("/{clientId}")
     public Client getMaster(@PathVariable Long clientId){
@@ -70,4 +76,5 @@ public class ClientController {
     public ResponseError handleRuntimeException(RuntimeException ex) {
         return new ResponseError(ex.getMessage());
     }
+
 }

@@ -8,9 +8,11 @@ import com.salon.service.AppointmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -55,6 +57,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/appointments")
+    @ResponseBody
     public List<UserAppointmentDTO> getAllAppointments(){
 
         Type listType = new TypeToken<List<UserAppointmentDTO>>() {}.getType();
@@ -63,7 +66,7 @@ public class AppointmentController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("appointments")
+    @PostMapping("/appointments")
     public Appointment createAppointment(@RequestBody @Valid AppointmentDTO appointment,
                                          Principal principal){
         log.info("Appointment: {} ", appointment);
@@ -71,12 +74,8 @@ public class AppointmentController {
     }
 
     @GetMapping("appointments/{appointmentId}")
-    public ResponseEntity<Appointment> getAppointmentById(@PathVariable Long appointmentId){
-        try{
-            return new ResponseEntity<>( appointmentService.findById(appointmentId) , HttpStatus.OK);
-        } catch (NoSuchElementException ex) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+    public Appointment getAppointmentById(@PathVariable Long appointmentId){
+        return appointmentService.findById(appointmentId);
     }
 
     @DeleteMapping("appointments/{appointmentId}")
@@ -95,10 +94,25 @@ public class AppointmentController {
         return new ModelMapper().map(appointments, listType);
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseBody
+    public ResponseError conflict() {
+        return new ResponseError("Appointment already exists");
+    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseBody
     public ResponseError handleRuntimeException(NoSuchElementException ex) {
         return new ResponseError(ex.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseBody
+    public ResponseError handleRuntimeException(RuntimeException ex) {
+        return new ResponseError(ex.getMessage());
+    }
+
 }

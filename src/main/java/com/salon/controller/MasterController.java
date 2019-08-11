@@ -40,6 +40,12 @@ public class MasterController {
         return masterService.save(master);
     }
 
+
+    @DeleteMapping
+    public void deleteAllMasters(){
+        masterService.deleteAll();
+    }
+
     @GetMapping("/{masterId}")
     public Master getMaster(@PathVariable Long masterId){
          return masterService.findById(masterId);
@@ -55,6 +61,7 @@ public class MasterController {
                                         @RequestParam("imagePath") String imagePath){
         return masterService.updateImage(masterId, imagePath);
     }
+
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotUniqueUsernameException.class)

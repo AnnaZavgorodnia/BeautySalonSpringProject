@@ -20,7 +20,7 @@ import java.util.Set;
 @Table(name="masters")
 public class Master extends User{
 
-    @OneToMany(mappedBy = "master")
+    @OneToMany(mappedBy = "master", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Appointment> appointments;
 
@@ -34,7 +34,7 @@ public class Master extends User{
     @Enumerated(EnumType.STRING)
     private Position position;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JsonIgnore
     @JoinTable(name = "master_service",
             joinColumns = @JoinColumn(name = "master_id", referencedColumnName = "id"),
