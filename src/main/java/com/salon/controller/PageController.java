@@ -19,7 +19,7 @@ public class PageController {
         return "index";
     }
 
-    @RequestMapping("/login")
+    @GetMapping("/login")
     public String loginForm(@RequestParam(value = "error", required = false) String error,
                             @RequestParam(value = "logout", required = false) String logout,
                             Model model){
@@ -70,7 +70,4 @@ public class PageController {
         model.addAttribute("module","all_masters");
         return "all_masters";
     }
-
-
-
 }
