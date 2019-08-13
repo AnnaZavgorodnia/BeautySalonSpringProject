@@ -53,11 +53,14 @@ public class AppointmentController {
     }
 
     @GetMapping("masters/{masterId}/appointments/{date}")
-    public List<Appointment> getMastersAppointmentsByDate(
+    public List<AppointmentDTO> getMastersAppointmentsByDate(
             @PathVariable Long masterId,
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date){
         log.info("date in get by date ------ {}",date);
-        return appointmentService.findAllMastersAppointmentsByDate(masterId, date);
+        Type listType = new TypeToken<List<UserAppointmentDTO>>() {}.getType();
+        return new ModelMapper().map(
+                appointmentService.findAllMastersAppointmentsByDate(masterId, date),
+                listType);
     }
 
     @GetMapping("/appointments")

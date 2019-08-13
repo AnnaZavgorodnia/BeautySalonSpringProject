@@ -27,6 +27,9 @@ public class Service{
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "name_ua", nullable = false)
+    private String nameUa;
+
     @Column(name = "price", nullable = false)
     private Integer price;
 

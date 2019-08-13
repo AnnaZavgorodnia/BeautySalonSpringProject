@@ -11,7 +11,7 @@ function regUser(e) {
         .then(data => {
             console.log(data);
             if(data == null){
-                document.getElementById("username-error").innerHTML = "User with such username already exists";
+                document.getElementById("username-error").innerHTML = MY_APP.messages.error_exists;
             } else if(data.errors){
                 data.errors.forEach(el => {
                    document.getElementById(`${el.field}-error`).innerHTML = el.defaultMessage;

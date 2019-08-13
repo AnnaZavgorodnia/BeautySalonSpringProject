@@ -3,7 +3,17 @@
         /*<![CDATA[*/
         var MY_APP = {
             contextPath: /*[[@{/}]]*/,
-            user: /*[[${#authentication.getPrincipal()}]]*/
+            user: /*[[${#authentication.getPrincipal()}]]*/,
+            locale: /*[[${locale}]]*/,
+            messages: {
+                book: /*[[#{create.appointment.book}]]*/,
+                make_an_app : /*[[#{create.appointment.button.master}]]*/,
+                master: /*[[#{create.appointment.master.title}]]*/,
+                price: /*[[#{create.appointment.price.title}]]*/,
+                service: /*[[#{create.appointment.service.title}]]*/,
+                cancel: /*[[#{button.cancel}]]*/,
+                error_exists: /*[[#{user.exists.error}]]*/
+            }
         };
         /*]]>*/
     </script>

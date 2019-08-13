@@ -36,38 +36,45 @@ public class PageController {
     }
 
     @GetMapping("/masters")
-    public String mastersPage(Model model, Principal principal){
+    public String mastersPage(Model model, Locale locale){
         model.addAttribute("module", "masters");
+        model.addAttribute("locale", locale);
         return "masters";
     }
 
     @GetMapping("/create_app/{id}")
-    public String addAppointmentPage(@PathVariable Long id, Model model){
+    public String addAppointmentPage(@PathVariable Long id,
+                                     Model model, Locale locale){
         model.addAttribute("masterId",id);
+        model.addAttribute("locale", locale);
         return "create_app";
     }
 
     @GetMapping("/me/appointments")
-    public String addMyAppPage(Model model){
+    public String addMyAppPage(Model model, Locale locale){
         model.addAttribute("module","my_appointments");
+        model.addAttribute("locale", locale);
         return "user_apps";
     }
 
     @GetMapping("/all_appointments")
-    public String allAppointmentsPage(Model model){
+    public String allAppointmentsPage(Model model, Locale locale){
         model.addAttribute("module","all_appointments");
+        model.addAttribute("locale", locale);
         return "all_appointments";
     }
 
     @GetMapping("/create_master")
-    public String addMasterPage(Model model){
+    public String addMasterPage(Model model, Locale locale){
         model.addAttribute("module","create_master");
+        model.addAttribute("locale", locale);
         return "create_master";
     }
 
     @GetMapping("/all_masters")
-    public String allMastersPage(Model model){
+    public String allMastersPage(Model model, Locale locale){
         model.addAttribute("module","all_masters");
+        model.addAttribute("locale", locale);
         return "all_masters";
     }
 }

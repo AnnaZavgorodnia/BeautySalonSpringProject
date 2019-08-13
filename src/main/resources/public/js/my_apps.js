@@ -50,24 +50,32 @@ function fillApps(data) {
 
        let master = document.createElement("p");
        master.setAttribute("class","card-text");
-       master.innerHTML = "Master: " + el.master.fullName;
-       body.appendChild(master);
 
        let serviceName = document.createElement("p");
        serviceName.setAttribute("class","card-text");
-       serviceName.innerHTML = "Service: " + el.service.name;
-       body.appendChild(serviceName);
 
        let price = document.createElement("p");
        price.setAttribute("class","card-text");
-       price.innerHTML = "Price: " + el.service.price;
+
+       if(MY_APP.locale === "en"){
+           master.innerHTML = MY_APP.messages.master + ": " + el.master.fullName;
+           serviceName.innerHTML = MY_APP.messages.service + ":" + el.service.name;
+           price.innerHTML = MY_APP.messages.price + ":" + el.service.price;
+       } else{
+           master.innerHTML = MY_APP.messages.master + ": " + el.master.fullNameUa;
+           serviceName.innerHTML = MY_APP.messages.service + ": " + el.service.nameUa;
+           price.innerHTML = MY_APP.messages.price + ": " + el.service.price;
+       }
+
+       body.appendChild(master);
+       body.appendChild(serviceName);
        body.appendChild(price);
 
        let btn = document.createElement("button");
        btn.setAttribute("type","button");
        btn.setAttribute("class","btn btn-danger");
        btn.dataset.appId = el.id;
-       btn.innerHTML = "Cancel";
+       btn.innerHTML = MY_APP.messages.cancel;
        btn.addEventListener("click",cancelApp);
        body.appendChild(btn);
        card.appendChild(body);

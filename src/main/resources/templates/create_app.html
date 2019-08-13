@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Montserrat:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="/static/styles/styles.css">
+    <object th:remove="tag" th:include="partials/scripts :: header" />
 </head>
 <body>
     <div th:replace="partials/header :: header">...</div>
@@ -24,13 +25,10 @@
                 </div>
                 <div class="input-field">
                     <select id="select-service">
-                        <option value="" disabled selected>Choose service</option>
+                        <option value="" disabled selected th:text="#{create.appointment.choose.service.title}"></option>
                     </select>
                     <label for="select-service" id="select_label"
-                           th:text="#{create.appointment.service.title}">Choose service...</label>
-                    <h5 id="price"></h5>
-                    <h5 id="app_date"></h5>
-                    <h5 id="time"></h5>
+                           th:text="#{create.appointment.choose.service.title}">Choose service...</label>
                 </div>
                 <div class="create__app__time__date">
                     <label for="date" th:text="#{create.appointment.date}">Choose date..</label>
@@ -46,11 +44,26 @@
         <div class="modal-content">
             <div class="row">
                 <div class="col s6" style="font-size: 20px">
-                    <p id="master-modal"></p>
-                    <p id="service-modal"></p>
-                    <p id="price-modal"></p>
-                    <p id="date-modal"></p>
-                    <p id="time-modal"></p>
+                    <p>
+                        <span th:text="#{create.appointment.master.title}"></span>:
+                        <span id="master-modal"></span>
+                    </p>
+                    <p>
+                        <span th:text="#{create.appointment.service.title}"></span>:
+                        <span id="service-modal"></span>
+                    </p>
+                    <p>
+                        <span th:text="#{create.appointment.price.title}"></span>:
+                        <span id="price-modal"></span>
+                    </p>
+                    <p>
+                        <span th:text="#{create.appointment.date.title}"></span>:
+                        <span id="date-modal"></span>
+                    </p>
+                    <p>
+                        <span th:text="#{create.appointment.time.title}"></span>:
+                        <span id="time-modal"></span>
+                    </p>
                 </div>
                 <div class="col s6 center-align" id="master_image">
                 </div>

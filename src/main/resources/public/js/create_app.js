@@ -16,8 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
             image.setAttribute("id","img");
             image.style.width = "60%";
             document.getElementById("master_image").appendChild(image);
-
-            document.getElementById("master-modal").innerHTML = "Master: " + master.fullName;
+            if(MY_APP.locale === "en")
+                document.getElementById("master-modal").innerHTML = master.fullName;
+            else
+                document.getElementById("master-modal").innerHTML = master.fullNameUa;
         })
         .catch(e => console.log(e));
 
@@ -33,10 +35,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log(e.target);
                 let inp = document.getElementById('select-service').M_FormSelect.input.value;
                 console.log(inp);
-                document.getElementById("service-modal").innerHTML = "Service: " + inp;
+                document.getElementById("service-modal").innerHTML = inp;
                 let val = document.getElementById(inp);
-                document.getElementById("price").innerHTML = "Price: " + val.dataset.price;
-                document.getElementById("price-modal").innerHTML = "Price: " + val.dataset.price + "UAH";
+                document.getElementById("price-modal").innerHTML = val.dataset.price + "UAH";
                 document.getElementById("select_label").style.color = "black";
             });
         })
@@ -71,10 +72,15 @@ function renderServices(data){
 
     data.forEach(el => {
         let option = document.createElement("option");
+        if(MY_APP.locale === "en"){
+            option.setAttribute("id", el.name);
+            option.innerHTML = el.name;
+        } else{
+            option.setAttribute("id", el.nameUa);
+            option.innerHTML = el.nameUa;
+        }
         option.setAttribute("value", el.name);
-        option.setAttribute("id", el.name);
         option.dataset.price = el.price;
-        option.innerHTML = el.name;
         select.appendChild(option);
     });
 }
@@ -106,8 +112,6 @@ const ondraw = async function fullTime(){
     let date = new Date(instance.date);
     date.setHours(date.getHours()+3);
 
-    document.getElementById("app_date").innerHTML = "Date: " + date.toDateString();
-
     const data = await getApps(MASTER_ID, date.toISOString());
     console.log(data);
 
@@ -128,7 +132,7 @@ function createSchedule(time, data){
     title.innerHTML = time;
     let btn = document.createElement("button");
     btn.addEventListener("click", fullModal);
-    btn.innerHTML = "book";
+    btn.innerHTML = MY_APP.messages.book;
     btn.setAttribute("class","btn-black btn-active");
     btn.setAttribute("id",time);
     btn.dataset.time = time;
@@ -148,11 +152,6 @@ function createSchedule(time, data){
     timeTable.appendChild(timeRow);
 }
 
-function setTime(e){
-    document.getElementById("time").innerHTML = "Time: " +
-        e.target.dataset.time;
-}
-
 function fullModal(e) {
     let serviceName = document.getElementById('select-service').M_FormSelect.input.value;
     let serviceElement = document.getElementById(serviceName);
@@ -161,7 +160,6 @@ function fullModal(e) {
         document.getElementById("select_label").style.color = "red";
 
     } else{
-        setTime(e);
 
         let someDate = document.getElementsByClassName('datepicker')[0];
         let instance = M.Datepicker.getInstance(someDate);
@@ -180,8 +178,8 @@ function fullModal(e) {
         let time_el = document.getElementById("time-modal");
         date_el.value = appDate;
         time_el.value = appTime;
-        date_el.innerHTML = "Date: " + appDate;
-        time_el.innerHTML = "Time: " + appTime.substring(0,5);
+        date_el.innerHTML = appDate;
+        time_el.innerHTML = appTime.substring(0,5);
 
         var inst = M.Modal.getInstance(document.getElementById("modal"));
         inst.open();
@@ -205,6 +203,7 @@ function makeApp(){
     finalDate.setHours(finalDate.getHours()+3);
 
     let serviceName = document.getElementById('select-service').M_FormSelect.input.value;
+    let option = document.getElementById(serviceName).value;
 
     (async () => {
         const rawResponse = await fetch('http://localhost:8088/api/appointments', {
@@ -216,7 +215,7 @@ function makeApp(){
             body: JSON.stringify({
                 master: MASTER_ID,
                 appDate: finalDate.toISOString(),
-                serviceName: serviceName
+                serviceName: option
             })
         });
         const content = await rawResponse.json();

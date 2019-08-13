@@ -60,7 +60,11 @@ function renderServices(data){
     data.forEach(el => {
         let option = document.createElement("option");
         option.setAttribute("value", el.id);
-        option.innerHTML = el.name;
+        if(MY_APP.locale === "en"){
+            option.innerHTML = el.name;
+        } else{
+            option.innerHTML = el.nameUa;
+        }
         select.appendChild(option);
     });
 
@@ -75,6 +79,8 @@ function addMaster(e){
 
     let firstName = document.getElementById("firstName").value;
     let lastName = document.getElementById("lastName").value;
+    let firstNameUa = document.getElementById("firstNameUa").value;
+    let lastNameUa = document.getElementById("lastNameUa").value;
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
     let email = document.getElementById("email").value;
@@ -105,6 +111,8 @@ function addMaster(e){
             body: JSON.stringify({
                 firstName: firstName,
                 lastName: lastName,
+                firstNameUa: firstNameUa,
+                lastNameUa: lastNameUa,
                 username: username,
                 password: password,
                 email: email,
@@ -115,34 +123,40 @@ function addMaster(e){
         });
 
             if(rawResponse.status === 409){
-                document.getElementById("username-error").innerHTML = "Username already exists";
-            } else{
+                document.getElementById("username-error").innerHTML = MY_APP.messages.error_exists;
+            } else if(rawResponse.status === 404 || rawResponse.status === 500){
+
+            } else if(rawResponse.status === 400) {
 
                 const content = await rawResponse.json();
 
                 console.log(content);
 
-                if(content.errors){
+                if (content.errors) {
                     content.errors.forEach(el => {
                         document.getElementById(`${el.field}-error`).innerHTML = el.defaultMessage;
                     });
-                } else{
-
-                    const input = document.getElementById('image');
-
-                    const formData = new FormData();
-
-                    formData.append("file", input.files[0]);
-                    const imageData = await upload(formData);
-
-                    if(imageData != null){
-                        updateImage(content.id, imageData.url);
-                    }
-
                 }
-            }
-    })();
+            } else if(rawResponse.status === 201){
 
+                const content = await rawResponse.json();
+
+                console.log(content);
+
+                const input = document.getElementById('image');
+
+                const formData = new FormData();
+
+                formData.append("file", input.files[0]);
+                const imageData = await upload(formData);
+
+                if(imageData != null){
+                    updateImage(content.id, imageData.url);
+                }
+
+            }
+
+    })();
 }
 
 const upload = (data) => {

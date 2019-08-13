@@ -19,11 +19,25 @@ public class MasterDTO {
             message = "{registration.page.username.error}")
     private String username;
 
-    @NotBlank(message = "{registration.page.first.name.error}")
+    @NotBlank(message = "{registration.page.first.name.en.master.error}")
+    @Pattern(regexp = "[A-Z][a-z]*",
+            message = "{registration.page.first.name.en.master.error}")
     private String firstName;
 
-    @NotBlank(message = "{registration.page.last.name.error}")
+    @NotBlank(message = "{registration.page.last.name.en.master.error}")
+    @Pattern(regexp = "[A-Z][a-z]*",
+            message = "{registration.page.last.name.en.master.error}")
     private String lastName;
+
+    @NotBlank(message = "{registration.page.first.name.ua.master.error}")
+    @Pattern(regexp = "[А-ЩЬЮЯЇІЄҐ][а-щьюяїієґ]*",
+            message = "{registration.page.first.name.ua.master.error}")
+    private String firstNameUa;
+
+    @NotBlank(message = "{registration.page.last.name.ua.master.error}")
+    @Pattern(regexp = "[А-ЩЬЮЯЇІЄҐ][а-щьюяїієґ]*",
+            message = "{registration.page.last.name.ua.master.error}")
+    private String lastNameUa;
 
     @NotBlank(message = "{registration.page.email.error}")
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[a-z]{2,6}$",

@@ -34,6 +34,9 @@ public class Master extends User{
     @Enumerated(EnumType.STRING)
     private Position position;
 
+    @Column(name = "full_name_ua", nullable = false)
+    private String fullNameUa;
+
     @ManyToMany
     @JsonIgnore
     @JoinTable(name = "master_service",

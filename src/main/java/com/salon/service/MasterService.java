@@ -44,6 +44,7 @@ public class MasterService {
         Master toSave = new Master();
         toSave.setUsername(master.getUsername());
         toSave.setFullName(master.getFirstName() + " " + master.getLastName());
+        toSave.setFullNameUa(master.getFirstNameUa() + " " + master.getLastNameUa());
         toSave.setEmail(master.getEmail());
         toSave.setPassword(passwordEncoder.encode(master.getPassword()));
         toSave.setRole(RoleType.MASTER);

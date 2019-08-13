@@ -8,6 +8,7 @@ import com.salon.entity.Service;
 import com.salon.service.MasterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,11 +64,11 @@ public class MasterController {
     }
 
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NotUniqueUsernameException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseBody
-    public ResponseError handleRuntimeException(NotUniqueUsernameException ex) {
-        return new ResponseError(ex.getMessage());
+    public ResponseError conflict() {
+        return new ResponseError("Appointment already exists");
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)

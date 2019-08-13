@@ -20,7 +20,11 @@ function renderMastersList(data){
         img.setAttribute("class", "circle");
         let span = document.createElement("span");
         span.setAttribute("class","title");
-        span.innerHTML = el.fullName;
+        if(MY_APP.locale === "en"){
+            span.innerHTML = el.fullName;
+        } else {
+            span.innerHTML = el.fullNameUa;
+        }
         let p = document.createElement("p");
         p.innerHTML = el.position;
         let a = document.createElement("a");

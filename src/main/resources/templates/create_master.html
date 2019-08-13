@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Montserrat:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="/static/styles/styles.css">
+    <object th:remove="tag" th:include="partials/scripts :: header" />
     <title>Create master</title>
 </head>
 <body>
@@ -17,7 +18,7 @@
         <div class="container">
             <div class="section__header">
                 <h3 class="section__subtitle"
-                    th:text="#{create.appointment.title}">Add Master</h3>
+                    th:text="#{create.master.title}">Add Master</h3>
             </div>
             <div class="row">
                 <form class="col s10 offset-s1" id="add_master" autocomplete="off">
@@ -28,7 +29,7 @@
                                    type="text"
                                    class="validate" required>
                             <label for="firstName"
-                                   th:text="#{registration.page.first.name}"></label>
+                                   th:text="#{registration.page.first.name.en}"></label>
                             <span class="helper-text" id="firstName-error" style="color: darkred"></span>
                         </div>
                         <div class="input-field col s6">
@@ -36,8 +37,27 @@
                                    id="lastName"
                                    type="text"
                                    class="validate" required>
-                            <label for="lastName" th:text="#{registration.page.last.name}"></label>
+                            <label for="lastName" th:text="#{registration.page.last.name.en}"></label>
                             <span class="helper-text" id="lastName-error" style="color: darkred"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input name="firstNameUa"
+                                   id="firstNameUa"
+                                   type="text"
+                                   class="validate" required>
+                            <label for="firstNameUa"
+                                   th:text="#{registration.page.first.name.ua}"></label>
+                            <span class="helper-text" id="firstNameUa-error" style="color: darkred"></span>
+                        </div>
+                        <div class="input-field col s6">
+                            <input name="lastNameUa"
+                                   id="lastNameUa"
+                                   type="text"
+                                   class="validate" required>
+                            <label for="lastNameUa" th:text="#{registration.page.last.name.ua}"></label>
+                            <span class="helper-text" id="lastNameUa-error" style="color: darkred"></span>
                         </div>
                     </div>
                     <div class="row">
