@@ -1,12 +1,33 @@
+let CURRENT_PAGE = 0;
+const ELEMENTS_PER_PAGE = 3;
+
 document.addEventListener('DOMContentLoaded', function() {
 
-    getApps()
-        .then(data => fillApps(data))
-        .catch(e => console.log(e));
+    document.getElementById("load-button").addEventListener("click", loadMore);
+
+    loadMore();
+
 });
 
-async function getApps() {
-    let response = await fetch("http://localhost:8088/api/me/appointments");
+function removeButton(){
+    document.getElementById("load-button").remove();
+}
+
+function loadMore(){
+    getApps(CURRENT_PAGE, ELEMENTS_PER_PAGE)
+        .then(data => {
+            fillApps(data.content);
+            CURRENT_PAGE++;
+            if(CURRENT_PAGE >= data.totalPages){
+                removeButton();
+            }
+        })
+        .catch(e => console.log(e));
+}
+
+
+async function getApps(page,size) {
+    let response = await fetch(`http://localhost:8088/api/me/appointments?page=${page}&size=${size}`);
     let data = await response.json();
     console.log(data);
     return data;

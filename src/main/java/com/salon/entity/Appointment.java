@@ -41,7 +41,6 @@ public class Appointment {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "master_id", nullable = false)
-    @JsonIgnore
     private Master master;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

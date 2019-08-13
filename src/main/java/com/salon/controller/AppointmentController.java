@@ -9,6 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,20 +82,23 @@ public class AppointmentController {
         return appointmentService.findById(appointmentId);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("appointments/{appointmentId}")
-    public ResponseEntity deleteAppointment(@PathVariable Long appointmentId){
+    public void deleteAppointment(@PathVariable Long appointmentId){
         appointmentService.deleteById(appointmentId);
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/me/appointments")
-    public List<UserAppointmentDTO> getCurrentUserAppointments(Principal principal){
-        List<Appointment> appointments = appointmentService
-                                                .findByClient(principal.getName());
+    public Page<AppointmentDTO> getCurrentUserAppointments(
+            @RequestParam(value = "page") Integer pageNum,
+            @RequestParam(value = "size") Integer size,
+            Principal principal){
 
+        Pageable pageable = PageRequest.of(pageNum, size);
+        Page<Appointment> page = appointmentService.findByClient(principal.getName(), pageable);
         Type listType = new TypeToken<List<UserAppointmentDTO>>() {}.getType();
 
-        return new ModelMapper().map(appointments, listType);
+        return new PageImpl<>(new ModelMapper().map(page.getContent(), listType), page.getPageable(), page.getTotalElements());
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)

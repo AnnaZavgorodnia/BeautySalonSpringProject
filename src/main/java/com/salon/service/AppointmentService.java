@@ -4,6 +4,8 @@ import com.salon.entity.Appointment;
 import com.salon.dto.AppointmentDTO;
 import com.salon.repository.AppointmentRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -70,8 +72,8 @@ public class AppointmentService {
         return appRepo.findAppointmentsByMasterIdAndAppDate(masterId, parsedDate);
     }
 
-    public List<Appointment> findByClient(String name) {
-        return appRepo.findAppointmentsByClient_UsernameOrderByAppDateAscAppTimeAsc(name);
+    public Page<Appointment> findByClient(String name, Pageable pageable) {
+        return appRepo.findAppointmentsByClient_UsernameOrderByAppDateAscAppTimeAsc(name, pageable);
     }
 
     public void deleteById(Long appointmentId) {
