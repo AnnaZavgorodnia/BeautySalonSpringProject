@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,18 +29,21 @@ public class ImageController {
     //todo replace to properties
     private final String IMG_FOLDER =  "/home/anna/projects/imagesForSpringProject/";
 
-    @Autowired
-    private Cloudinary cloudinary;
+    private final Cloudinary cloudinary;
 
+    public ImageController(Cloudinary cloudinary) {
+        this.cloudinary = cloudinary;
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @ResponseBody
     public ResponseEntity saveImage(@RequestParam("file") MultipartFile image) throws IOException {
-        log.info("i was here {}",image);
         File file = new File(IMG_FOLDER + "something.jpg");
         image.transferTo(file);
         Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
-        log.info("url: {}",uploadResult.get("url"));
+        log.info("In saveImage() ----- url: {}",uploadResult.get("url"));
         return ResponseEntity.status(HttpStatus.CREATED).body(uploadResult);
     }
 

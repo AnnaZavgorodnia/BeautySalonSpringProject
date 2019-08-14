@@ -218,9 +218,16 @@ function makeApp(){
                 serviceName: option
             })
         });
-        const content = await rawResponse.json();
 
-        document.getElementById(content.appTime.substring(0,5)).setAttribute("class","btn-black btn-disabled");
-        console.log(content);
+        if(rawResponse.status === 409){
+            let instance = M.Modal.getInstance(document.getElementById("modal-exists"));
+            instance.open();
+        } else if(rawResponse.status === 201){
+            const content = await rawResponse.json();
+
+            document.getElementById(content.appTime.substring(0,5)).setAttribute("class","btn-black btn-disabled");
+            console.log(content);
+        }
+
     })();
 }

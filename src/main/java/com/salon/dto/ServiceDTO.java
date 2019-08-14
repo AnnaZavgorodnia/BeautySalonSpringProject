@@ -12,6 +12,9 @@ public class ServiceDTO {
     @NotBlank(message ="{service.name.error}")
     private String name;
 
+    @NotBlank(message ="{service.name.error}")
+    private String nameUa;
+
     @NotNull(message = "{service.price.error}")
     @Min(value = 0, message = "{service.price.error}")
     private Integer price;

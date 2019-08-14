@@ -53,7 +53,7 @@ public class AppointmentControllerTests {
 
     @Before
     @WithMockUser(username = "admin",
-            roles = {"ADMIN"})
+            authorities = {"ADMIN"})
     public void contextLoads() throws Exception {
         assertNotNull(mvc);
         assertNotNull(appointmentService);
@@ -133,7 +133,7 @@ public class AppointmentControllerTests {
 
     @Test
     @WithMockUser(username = "client",
-            roles = {"CLIENT"})
+            authorities = {"CLIENT"})
     public void createAnAppointment_success()
             throws Exception {
 
@@ -153,7 +153,7 @@ public class AppointmentControllerTests {
 
     @Test
     @WithMockUser(username = "client",
-            roles = {"CLIENT"})
+            authorities = {"CLIENT"})
     public void createAnAppointment_invalidDataFailure()
             throws Exception{
 
@@ -165,7 +165,7 @@ public class AppointmentControllerTests {
 
     @Test
     @WithMockUser(username = "client",
-            roles = {"CLIENT"})
+            authorities = {"CLIENT"})
     public void createAnAppointment_duplicateDataFailure()
             throws Exception{
 
@@ -185,27 +185,30 @@ public class AppointmentControllerTests {
 
     @Test
     @WithMockUser(username = "admin",
-            roles = {"CLIENT"})
-    public void getAllUsersAppointments_success() throws Exception {
+            authorities = {"CLIENT"})
+    public void getAllUsersAppointments_badRequest() throws Exception {
 
         assertThat(appointmentService.findAll().size(), is(1));
 
         mvc.perform(get("/api/me/appointments"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(username = "admin",
+            authorities = {"CLIENT"})
+    public void getAllUsersAppointments_success() throws Exception {
+
+        assertThat(appointmentService.findAll().size(), is(1));
+
+        mvc.perform(get("/api/me/appointments?page=0&size=3"))
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(1)));
+                .andExpect(jsonPath("$.content.size()", is(1)));
     }
 
     // GET api/appointments
-
-    @Test
-    @WithMockUser(username = "client",
-            roles = {"CLIENT"})
-    public void getAllAppointments_forbidden() throws Exception {
-        mvc.perform(get("/api/appointments"))
-                .andExpect(status().isForbidden());
-    }
 
     @Test
     @WithMockUser(username = "admin",
@@ -222,7 +225,7 @@ public class AppointmentControllerTests {
 
     @Test
     @WithMockUser(username = "admin",
-            roles = {"ADMIN"})
+            authorities = {"ADMIN"})
     public void getAppointmentById_success() throws Exception {
 
         assertThat(appointmentService.findAll().size(), is(1));
@@ -238,7 +241,7 @@ public class AppointmentControllerTests {
 
     @Test
     @WithMockUser(username = "admin",
-            roles = {"ADMIN"})
+            authorities = {"ADMIN"})
     public void getAppointmentById_idDoesNotExistFailure() throws Exception {
 
         mvc.perform(get("/api/appointments/1234"))
@@ -251,7 +254,7 @@ public class AppointmentControllerTests {
 
     @Test
     @WithMockUser(username = "admin",
-            roles = {"ADMIN"})
+            authorities = {"ADMIN"})
     public void deleteAppointmentById_success() throws Exception {
 
         assertThat(appointmentService.findAll().size(), is(1));
@@ -266,7 +269,7 @@ public class AppointmentControllerTests {
 
     @Test
     @WithMockUser(username = "admin",
-            roles = {"ADMIN"})
+            authorities = {"ADMIN"})
     public void deleteAppointmentById_idDoesNotExistFailure() throws Exception {
 
         assertThat(appointmentService.findAll().size(), is(1));
@@ -281,7 +284,7 @@ public class AppointmentControllerTests {
 
     @Test
     @WithMockUser(username = "admin",
-            roles = {"ADMIN"})
+            authorities = {"ADMIN"})
     public void getMastersAppointments_success() throws Exception {
 
         assertThat(appointmentService.findAll().size(), is(1));
@@ -298,7 +301,7 @@ public class AppointmentControllerTests {
 
     @Test
     @WithMockUser(username = "admin",
-            roles = {"ADMIN"})
+            authorities = {"ADMIN"})
     public void getMastersAppointments_noAppointmentsWithSuchMaster() throws Exception {
 
         mvc.perform(get("/api/masters/" + 1111 + "/appointments"))
@@ -312,7 +315,7 @@ public class AppointmentControllerTests {
 
     @Test
     @WithMockUser(username = "admin",
-            roles = {"ADMIN"})
+            authorities = {"ADMIN"})
     public void getMastersAppointmentsByDate_success() throws Exception {
 
         assertThat(appointmentService.findAll().size(), is(1));
@@ -329,7 +332,7 @@ public class AppointmentControllerTests {
 
     @Test
     @WithMockUser(username = "admin",
-            roles = {"ADMIN"})
+            authorities = {"ADMIN"})
     public void getMastersAppointmentsByDate_noAppointmentsWithSuchMaster() throws Exception {
 
         mvc.perform(get("/api/masters/" + 1111 + "/appointments/2019-09-13T12:00:00Z"))
@@ -343,6 +346,8 @@ public class AppointmentControllerTests {
         return "{\"username\": \"master\"," +
                 "\"firstName\": \"Aliona\"," +
                 "\"lastName\": \"Last\"," +
+                "\"firstNameUa\": \"Альона\"," +
+                "\"lastNameUa\": \"Ласт\"," +
                 "\"email\": \"master123@gmail.com\"," +
                 "\"instagram\": \"blablablab\"," +
                 "\"password\": \"1Aaaa\"," +
@@ -368,6 +373,7 @@ public class AppointmentControllerTests {
 
     private String postService(){
         return "{\"name\": \"HAIRCUT\"," +
+                "\"nameUa\": \"Стрижка\"," +
                 "\"price\": 2100}";
     }
 

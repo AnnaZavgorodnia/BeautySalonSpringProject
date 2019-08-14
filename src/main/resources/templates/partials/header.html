@@ -68,9 +68,10 @@
                             </li>
                             <li class="nav__link"
                                 th:if="${#authorization.expression('isAuthenticated()')}"
-                                th:classappend="${module == 'my_appointments' ? 'active' : ''}">
-                                <span class="nav__sublink"
-                                      th:text="#{header.menu.account}">Account</span>
+                                th:classappend="${module == 'my_account' ? 'active' : ''}">
+                                <a class="nav__sublink"
+                                   th:href="@{/me/account}"
+                                   th:text="#{header.menu.account}">Account</a>
                                 <ul class="nav__drop__menu">
                                     <li th:if="${#authorization.expression('isAuthenticated()') &&
                                          #authentication.getPrincipal().getRole().toString() == 'CLIENT'}">

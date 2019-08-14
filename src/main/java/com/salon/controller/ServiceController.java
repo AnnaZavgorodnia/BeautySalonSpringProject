@@ -1,11 +1,13 @@
 package com.salon.controller;
 
+import com.salon.controller.error.ResponseError;
 import com.salon.dto.ServiceDTO;
 import com.salon.entity.Service;
 import com.salon.service.ServiceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequestMapping(path="/api/services",
         produces="application/json")
 @CrossOrigin(origins="*")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class ServiceController {
 
     private final ServiceService serviceService;
@@ -40,9 +43,10 @@ public class ServiceController {
         return serviceService.create(service);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity handleRuntimeException(RuntimeException ex) {
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    public ResponseError handleRuntimeException(RuntimeException ex) {
+        return new ResponseError(ex.getMessage());
     }
 
 }

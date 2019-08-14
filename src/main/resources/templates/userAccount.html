@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Montserrat:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles/styles.css">
+    <link rel="stylesheet" href="/static/styles/account.css">
+    <object th:remove="tag" th:include="partials/scripts :: header" />
+    <title>My account</title>
+</head>
+<body>
+    <div th:replace="partials/header :: header">...</div>
+
+    <div class="center">
+        <div class="avatar">
+            <img id="image" src="/static/images/masters/1.jpg" alt="avatar">
+        </div>
+        <div class="content">
+            <h1><span th:text="#{registration.page.full.name}"></span>: <span id="name"></span></h1>
+            <h2><span th:text="#{role.title}"></span>: <span id="role"></span></h2>
+            <h2><span th:text="#{registration.page.email}"></span>: <span id="email"></span></h2>
+            <div th:if="${#authorization.expression('isAuthenticated()') &&
+                          #authentication.getPrincipal().getRole().toString() == 'CLIENT'}"
+                    class="buttons-holder">
+                <a class="btn"
+                   th:text="#{header.menu.appointments}"
+                   th:href="@{/me/appointments}"></a>
+                <a class="btn"
+                   th:href="@{/masters}"
+                   th:text="#{header.menu.masters}"></a>
+            </div>
+            <div th:if="${#authorization.expression('isAuthenticated()') &&
+                          #authentication.getPrincipal().getRole().toString() == 'ADMIN'}"
+                 class="buttons-holder">
+                <a class="btn"
+                   th:text="#{header.menu.appointments}"
+                   th:href="@{/me/appointments}"></a>
+                <a class="btn"
+                   th:href="@{/all_appointments}"
+                   th:text="#{header.menu.all_appoinments}"></a>
+            </div>
+            <div th:if="${#authorization.expression('isAuthenticated()') &&
+                          #authentication.getPrincipal().getRole().toString() == 'MASTER'}"
+                 class="buttons-holder">
+                <a class="btn"
+                   th:href="@{/all_appointments}"
+                   th:text="#{header.menu.all_appoinments}"></a>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/js/account.js"></script>
+</body>
+</html>

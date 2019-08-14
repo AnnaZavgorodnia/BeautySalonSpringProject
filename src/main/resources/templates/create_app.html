@@ -70,8 +70,17 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="modal-close waves-effect waves-red btn-flat">Cancel</button>
-            <button type="button" id="button-book" class="modal-close waves-effect waves-green btn-flat">Book</button>
+            <button type="button" class="modal-close waves-effect waves-red btn-flat" th:text="#{button.cancel}">Cancel</button>
+            <button type="button" id="button-book" class="modal-close waves-effect waves-green btn-flat" th:text="#{create.appointment.book}">Book</button>
+        </div>
+    </div>
+
+    <div id="modal-exists" class="modal" style="width: 40%">
+        <div class="modal-content">
+            <h1 th:text="#{create.appointment.exists}"></h1>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="modal-close waves-effect waves-red btn-flat" th:text="#{button.ok}">Ok</button>
         </div>
     </div>
 

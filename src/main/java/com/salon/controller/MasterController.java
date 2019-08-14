@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,33 +31,38 @@ public class MasterController {
         this.masterService = masterService;
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT')")
     @GetMapping
     public List<Master> getAllMasters(){
         return masterService.getAll();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Master createMaster(@RequestBody @Valid MasterDTO master){
         return masterService.save(master);
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping
     public void deleteAllMasters(){
         masterService.deleteAll();
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','MASTER','CLIENT')")
     @GetMapping("/{masterId}")
     public Master getMaster(@PathVariable Long masterId){
          return masterService.findById(masterId);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT')")
     @GetMapping("/{masterId}/services")
     public List<Service> findMastersServices(@PathVariable Long masterId){
         return masterService.findById(masterId).getServices();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/{masterId}/image")
     public Master updateMasterImagePath(@PathVariable Long masterId,
                                         @RequestParam("imagePath") String imagePath){

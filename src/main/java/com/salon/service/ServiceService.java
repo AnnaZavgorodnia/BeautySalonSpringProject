@@ -31,6 +31,7 @@ public class ServiceService {
     public Service create(ServiceDTO service) {
         return serviceRepo.save(Service.builder()
                 .name(service.getName())
+                .nameUa(service.getNameUa())
                 .price(service.getPrice())
                 .build());
     }

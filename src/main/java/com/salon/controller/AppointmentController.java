@@ -43,6 +43,7 @@ public class AppointmentController {
     }
 
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT','MASTER')")
     @GetMapping("masters/{masterId}/appointments")
     public List<UserAppointmentDTO> getAllMastersAppointments(@PathVariable Long masterId){
 
@@ -52,6 +53,7 @@ public class AppointmentController {
                                     listType);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT','MASTER')")
     @GetMapping("masters/{masterId}/appointments/{date}")
     public List<AppointmentDTO> getMastersAppointmentsByDate(
             @PathVariable Long masterId,
@@ -63,6 +65,7 @@ public class AppointmentController {
                 listType);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','MASTER')")
     @GetMapping("/appointments")
     @ResponseBody
     public List<UserAppointmentDTO> getAllAppointments(){
@@ -72,6 +75,7 @@ public class AppointmentController {
         return new ModelMapper().map(appointmentService.findAll(), listType);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/appointments")
     public Appointment createAppointment(@RequestBody @Valid AppointmentDTO appointment,
@@ -80,17 +84,20 @@ public class AppointmentController {
         return appointmentService.save(appointment, principal.getName());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT')")
     @GetMapping("appointments/{appointmentId}")
     public Appointment getAppointmentById(@PathVariable Long appointmentId){
         return appointmentService.findById(appointmentId);
     }
 
+    @PreAuthorize("hasAuthority('CLIENT')")
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("appointments/{appointmentId}")
     public void deleteAppointment(@PathVariable Long appointmentId){
         appointmentService.deleteById(appointmentId);
     }
 
+    @PreAuthorize("hasAuthority('CLIENT')")
     @GetMapping("/me/appointments")
     public Page<AppointmentDTO> getCurrentUserAppointments(
             @RequestParam(value = "page") Integer pageNum,

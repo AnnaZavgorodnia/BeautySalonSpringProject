@@ -11,6 +11,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,10 +34,12 @@ public class ClientController {
         this.clientService = clientService;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public List<Client> getAllClients(){
         return clientService.getAll();
     }
+
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -44,12 +47,13 @@ public class ClientController {
         return clientService.save(client);
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping
     public void deleteAllClients(){
         clientService.deleteAll();
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT')")
     @ResponseStatus(HttpStatus.FOUND)
     @GetMapping("/{clientId}")
     public Client getMaster(@PathVariable Long clientId){

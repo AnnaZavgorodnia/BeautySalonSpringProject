@@ -5,6 +5,7 @@ import com.salon.service.ClientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -23,6 +24,7 @@ public class CurrentUserController {
         this.clientService = clientService;
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT','MASTER')")
     @GetMapping
     public Client getCurrentUser(Principal principal){
         return clientService.findByUsername(principal.getName()).orElseThrow(NoSuchElementException::new);
