@@ -7,13 +7,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let rawResponse;
 
-        if(MY_APP.user.role === "ADMIN"){
-            rawResponse = await fetch(`http://localhost:8088/api/users/${MY_APP.user.id}`);
-        } else if(MY_APP.user.role === "MASTER"){
+        if(MY_APP.user.role === "MASTER"){
             rawResponse = await fetch(`http://localhost:8088/api/masters/${MY_APP.user.id}`);
         } else{
-            rawResponse = await fetch(`http://localhost:8088/api/clients/${MY_APP.user.id}`);
+            rawResponse = await fetch(`http://localhost:8088/api/users/${MY_APP.user.id}`);
         }
+
         const content = await rawResponse.json();
 
         if(MY_APP.user.role === "MASTER"){

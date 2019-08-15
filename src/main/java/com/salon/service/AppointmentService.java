@@ -40,7 +40,6 @@ public class AppointmentService {
     public Appointment save(AppointmentDTO appointment, String clientUsername) {
 
         LocalDateTime localDate = LocalDateTime.from(appointment.getAppDate());
-        localDate.withHour(0);
 
         Date time = Date
                 .from(appointment.getAppDate().atZone(ZoneId.systemDefault())

@@ -1,16 +1,13 @@
 package com.salon.controller;
 
 import com.salon.controller.error.ResponseError;
-import com.salon.controller.exceptions.NotUniqueUsernameException;
 import com.salon.dto.ClientDTO;
 import com.salon.entity.Client;
 import com.salon.service.ClientService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,7 +53,7 @@ public class ClientController {
     @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT')")
     @ResponseStatus(HttpStatus.FOUND)
     @GetMapping("/{clientId}")
-    public Client getMaster(@PathVariable Long clientId){
+    public Client getClient(@PathVariable Long clientId){
         return clientService.findById(clientId);
     }
 

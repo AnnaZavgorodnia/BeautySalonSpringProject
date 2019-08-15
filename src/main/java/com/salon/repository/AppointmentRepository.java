@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
-    List<Appointment> findByClientId(Long clientId);
     List<Appointment> findByMasterId(Long masterId);
     List<Appointment> findAppointmentsByMasterIdAndAppDate(Long masterId, Date appDate);
     Page<Appointment> findAppointmentsByClient_UsernameOrderByAppDateAscAppTimeAsc(String username, Pageable pageable);

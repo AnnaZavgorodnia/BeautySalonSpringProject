@@ -1,4 +1,4 @@
-package com.salon.controller.exceptions;
+package com.salon.controller.exception;
 
 public class NotUniqueUsernameException extends RuntimeException {
     public NotUniqueUsernameException() {

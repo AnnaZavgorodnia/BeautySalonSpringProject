@@ -28,6 +28,7 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
 
+    // todo replace to properties
     @Bean
     public Cloudinary cloudinary(){
         return new Cloudinary(ObjectUtils.asMap(

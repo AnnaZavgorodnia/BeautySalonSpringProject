@@ -1,13 +1,11 @@
 package com.salon.service;
 
-import com.salon.controller.exceptions.NotUniqueUsernameException;
+import com.salon.controller.exception.NotUniqueUsernameException;
 import com.salon.dto.ClientDTO;
 import com.salon.entity.Client;
 import com.salon.entity.RoleType;
 import com.salon.repository.ClientRepository;
 import lombok.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +27,7 @@ public class ClientService {
     }
 
     @Transactional
-    public Client save(@NonNull ClientDTO client) throws NotUniqueUsernameException {
+    public Client save(@NonNull ClientDTO client){
 
         Client toSave = new Client();
         toSave.setUsername(client.getUsername());

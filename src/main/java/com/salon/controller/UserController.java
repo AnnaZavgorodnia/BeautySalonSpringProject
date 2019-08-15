@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping(path="/users",
+@RequestMapping(path="/api/users",
         produces="application/json")
 @CrossOrigin(origins="*")
 @PreAuthorize("hasAuthority('ADMIN')")

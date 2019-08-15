@@ -1,7 +1,10 @@
 package com.salon.controller;
 
+import com.salon.controller.error.ResponseError;
 import com.salon.entity.Client;
+import com.salon.entity.User;
 import com.salon.service.ClientService;
+import com.salon.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,20 +21,21 @@ import java.util.NoSuchElementException;
 @CrossOrigin(origins="*")
 public class CurrentUserController {
 
-    private final ClientService clientService;
+    private final UserService userService;
 
-    public CurrentUserController(ClientService clientService) {
-        this.clientService = clientService;
+    public CurrentUserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT','MASTER')")
     @GetMapping
-    public Client getCurrentUser(Principal principal){
-        return clientService.findByUsername(principal.getName()).orElseThrow(NoSuchElementException::new);
+    public User getCurrentUser(Principal principal){
+        return userService.findByUsername(principal.getName()).orElseThrow(NoSuchElementException::new);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity handleRuntimeException(RuntimeException ex) {
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    public ResponseError handleRuntimeException(RuntimeException ex) {
+        return new ResponseError(ex.getMessage());
     }
 }

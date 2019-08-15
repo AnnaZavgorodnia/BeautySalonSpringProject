@@ -1,6 +1,6 @@
 package com.salon.service;
 
-import com.salon.controller.exceptions.NotUniqueUsernameException;
+import com.salon.controller.exception.NotUniqueUsernameException;
 import com.salon.dto.MasterDTO;
 import com.salon.entity.Master;
 import com.salon.entity.RoleType;
@@ -8,19 +8,14 @@ import com.salon.repository.MasterRepository;
 import com.salon.repository.ServiceReporitory;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
-import javax.xml.crypto.Data;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service

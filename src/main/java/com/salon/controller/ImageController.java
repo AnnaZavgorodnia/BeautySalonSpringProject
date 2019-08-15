@@ -43,7 +43,7 @@ public class ImageController {
         File file = new File(IMG_FOLDER + "something.jpg");
         image.transferTo(file);
         Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
-        log.info("In saveImage() ----- url: {}",uploadResult.get("url"));
+        log.info("IN saveImage ----- url: {}",uploadResult.get("url"));
         return ResponseEntity.status(HttpStatus.CREATED).body(uploadResult);
     }
 

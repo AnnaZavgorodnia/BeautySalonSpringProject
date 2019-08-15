@@ -42,6 +42,31 @@ public class AppointmentController {
         this.modelMapper = modelMapper;
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','MASTER')")
+    @GetMapping("/appointments")
+    @ResponseBody
+    public List<UserAppointmentDTO> getAllAppointments(){
+
+        Type listType = new TypeToken<List<UserAppointmentDTO>>() {}.getType();
+
+        return new ModelMapper().map(appointmentService.findAll(), listType);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT')")
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/appointments")
+    public Appointment createAppointment(@RequestBody @Valid AppointmentDTO appointment,
+                                         Principal principal){
+        log.info("IN  createAppointment ----- appointmentDTO: {} ", appointment);
+        return appointmentService.save(appointment, principal.getName());
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT')")
+    @GetMapping("appointments/{appointmentId}")
+    public Appointment getAppointmentById(@PathVariable Long appointmentId){
+        log.info("IN getAppointmentById ----- appointmentId: {}", appointmentId);
+        return appointmentService.findById(appointmentId);
+    }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT','MASTER')")
     @GetMapping("masters/{masterId}/appointments")
@@ -58,43 +83,21 @@ public class AppointmentController {
     public List<AppointmentDTO> getMastersAppointmentsByDate(
             @PathVariable Long masterId,
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date){
-        log.info("date in get by date ------ {}",date);
+        log.info("IN getMastersAppointmentsByDate ------ date: {}", date);
+        log.info("IN getMastersAppointmentsByDate ------ masterId: {}", masterId);
         Type listType = new TypeToken<List<UserAppointmentDTO>>() {}.getType();
         return new ModelMapper().map(
                 appointmentService.findAllMastersAppointmentsByDate(masterId, date),
                 listType);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','MASTER')")
-    @GetMapping("/appointments")
-    @ResponseBody
-    public List<UserAppointmentDTO> getAllAppointments(){
-
-        Type listType = new TypeToken<List<UserAppointmentDTO>>() {}.getType();
-
-        return new ModelMapper().map(appointmentService.findAll(), listType);
-    }
-
-    @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT')")
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/appointments")
-    public Appointment createAppointment(@RequestBody @Valid AppointmentDTO appointment,
-                                         Principal principal){
-        log.info("Appointment: {} ", appointment);
-        return appointmentService.save(appointment, principal.getName());
-    }
-
-    @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT')")
-    @GetMapping("appointments/{appointmentId}")
-    public Appointment getAppointmentById(@PathVariable Long appointmentId){
-        return appointmentService.findById(appointmentId);
-    }
-
     @PreAuthorize("hasAuthority('CLIENT')")
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("appointments/{appointmentId}")
-    public void deleteAppointment(@PathVariable Long appointmentId){
+    public void deleteAppointment(@PathVariable Long appointmentId) {
+        log.info("IN deleteAppointment ------ appointmentId: {}", appointmentId);
         appointmentService.deleteById(appointmentId);
+
     }
 
     @PreAuthorize("hasAuthority('CLIENT')")
@@ -103,6 +106,9 @@ public class AppointmentController {
             @RequestParam(value = "page") Integer pageNum,
             @RequestParam(value = "size") Integer size,
             Principal principal){
+
+        log.info("IN getCurrentUserAppointments ------ page: {}", pageNum);
+        log.info("IN getCurrentUserAppointments ------ size: {}", size);
 
         Pageable pageable = PageRequest.of(pageNum, size);
         Page<Appointment> page = appointmentService.findByClient(principal.getName(), pageable);
@@ -114,7 +120,8 @@ public class AppointmentController {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseBody
-    public ResponseError conflict() {
+    public ResponseError conflict(DataIntegrityViolationException e) {
+        log.warn("IN appointmentController ------ duplicate appointment");
         return new ResponseError("Appointment already exists");
     }
 
@@ -122,6 +129,7 @@ public class AppointmentController {
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseBody
     public ResponseError handleRuntimeException(NoSuchElementException ex) {
+        log.warn("IN appointmentController ------ element not found", ex);
         return new ResponseError(ex.getMessage());
     }
 
@@ -129,6 +137,7 @@ public class AppointmentController {
     @ExceptionHandler(RuntimeException.class)
     @ResponseBody
     public ResponseError handleRuntimeException(RuntimeException ex) {
+        log.warn("IN appointmentController ----- error occured ", ex);
         return new ResponseError(ex.getMessage());
     }
 

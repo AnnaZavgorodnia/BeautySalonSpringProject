@@ -1,14 +1,11 @@
 package com.salon.controller;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.security.Principal;
 import java.util.Locale;
 
 @Controller
@@ -48,21 +45,21 @@ public class PageController {
                                      Model model, Locale locale){
         model.addAttribute("masterId",id);
         model.addAttribute("locale", locale);
-        return "create_app";
+        return "createAppointment";
     }
 
     @GetMapping("/me/appointments")
     public String addMyAppPage(Model model, Locale locale){
         model.addAttribute("module","my_account");
         model.addAttribute("locale", locale);
-        return "user_apps";
+        return "userAppointments";
     }
 
     @GetMapping("/all_appointments")
     public String allAppointmentsPage(Model model, Locale locale){
         model.addAttribute("module","all_appointments");
         model.addAttribute("locale", locale);
-        return "all_appointments";
+        return "allAppointments";
     }
 
     @GetMapping("/create_master")
@@ -76,7 +73,7 @@ public class PageController {
     public String allMastersPage(Model model, Locale locale){
         model.addAttribute("module","all_masters");
         model.addAttribute("locale", locale);
-        return "all_masters";
+        return "allMasters";
     }
 
     @GetMapping("/me/account")
